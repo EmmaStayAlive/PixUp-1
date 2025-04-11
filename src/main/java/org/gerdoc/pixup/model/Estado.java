@@ -2,17 +2,19 @@ package org.gerdoc.pixup.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Table;
+import lombok.*;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity( name = "TBL_ESTADO")
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@Entity
+@Table( name = "TBL_ESTADO" )
 public class Estado extends Catalogo
 {
-    @Column( name ="estado" , nullable = false )
+    @Column( name ="ESTADO" , nullable = false )
     private String nombre;
 }
