@@ -21,7 +21,7 @@ public class EstadoCatalogo extends Catalogos<Estado>
     }
 
     @Override
-    public Estado newT()
+    public Estado newT( )
     {
         return new Estado( );
     }

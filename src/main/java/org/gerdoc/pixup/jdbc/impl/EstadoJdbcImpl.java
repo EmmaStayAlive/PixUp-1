@@ -4,6 +4,7 @@ import org.gerdoc.pixup.jdbc.Conexion;
 import org.gerdoc.pixup.jdbc.EstadoJdbc;
 import org.gerdoc.pixup.model.Estado;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -40,7 +41,7 @@ public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc
 
         try
         {
-            if( openConnection() )
+            if( !openConnection() )
             {
                 return null;
             }
@@ -65,6 +66,41 @@ public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc
         catch (SQLException e)
         {
             return null;
+        }
+    }
+
+    @Override
+    public boolean save(Estado estado)
+    {
+        PreparedStatement preparedStatement = null;
+        String sql = "INSERT INTO TBL_ESTADO (ESTADO) VALUES (?)";
+        int res = 0;
+        try
+        {
+            if( !openConnection( ) )
+            {
+                return false;
+            }
+            preparedStatement = connection.prepareStatement( sql );
+            preparedStatement.setString( 1, estado.getNombre( ) );
+            res = preparedStatement.executeUpdate( );
+            preparedStatement.close( );
+            closeConnection( );
+            return res == 1;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        EstadoJdbcImpl estadoJdbc = EstadoJdbcImpl.getInstance();
+        List<Estado> list = estadoJdbc.findAll();
+        for(Estado estado:list)
+        {
+            System.out.println(estado.getId()+" "+estado.getNombre());
         }
     }
 

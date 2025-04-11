@@ -75,7 +75,7 @@ public abstract class Conexion<T>
                     return false;
                 }
             }
-            return connection.isClosed();
+            return !connection.isClosed();
         }
         catch (SQLException e)
         {
