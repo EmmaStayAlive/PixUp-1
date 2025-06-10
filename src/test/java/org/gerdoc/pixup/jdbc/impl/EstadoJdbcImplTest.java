@@ -27,7 +27,7 @@ class EstadoJdbcImplTest
         estadoJdbc = EstadoJdbcImpl.getInstance();
         list = estadoJdbc.findAll();
         assertNotNull( list );
-        assertEquals( 1, list.size( ) );
+        assertEquals( 6, list.size( ) );
         list.forEach( System.out::println );
     }
 

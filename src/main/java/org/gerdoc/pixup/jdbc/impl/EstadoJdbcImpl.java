@@ -12,15 +12,14 @@ import java.util.List;
 
 public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc
 {
-    private static EstadoJdbcImpl estadoJdbc;
+    private static EstadoJdbc estadoJdbc;
 
     private EstadoJdbcImpl( )
     {
         super( );
     }
 
-
-    public static EstadoJdbcImpl getInstance( )
+    public static EstadoJdbc getInstance( )
     {
         if( estadoJdbc == null )
         {
@@ -96,7 +95,7 @@ public class EstadoJdbcImpl extends Conexion<Estado> implements EstadoJdbc
     }
 
     public static void main(String[] args) {
-        EstadoJdbcImpl estadoJdbc = EstadoJdbcImpl.getInstance();
+        EstadoJdbc estadoJdbc = EstadoJdbcImpl.getInstance();
         List<Estado> list = estadoJdbc.findAll();
         for(Estado estado:list)
         {

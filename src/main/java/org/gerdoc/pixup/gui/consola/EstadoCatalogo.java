@@ -1,11 +1,15 @@
 package org.gerdoc.pixup.gui.consola;
 
+import org.gerdoc.pixup.jdbc.EstadoJdbc;
+import org.gerdoc.pixup.jdbc.impl.EstadoJdbcImpl;
 import org.gerdoc.pixup.model.Estado;
 import org.gerdoc.pixup.util.ReadUtil;
 
 public class EstadoCatalogo extends Catalogos<Estado>
 {
-    public static EstadoCatalogo estadoCatalogo;
+    private static EstadoCatalogo estadoCatalogo;
+    private static EstadoJdbc estadoJdbc;
+
     private EstadoCatalogo( )
     {
         super();
@@ -43,4 +47,25 @@ public class EstadoCatalogo extends Catalogos<Estado>
         estado.setNombre( ReadUtil.read( ) );
     }
 
+    public boolean loadEstadoJdbc( )
+    {
+        estadoJdbc = EstadoJdbcImpl.getInstance();
+        return estadoJdbc != null;
+    }
+
+
+    @Override
+    public void print( )
+    {
+        if( estadoJdbc == null )
+        {
+            if( !loadEstadoJdbc() )
+            {
+                System.out.println( "No se pudo cargar el estado" );
+                return;
+            }
+        }
+        list = estadoJdbc.findAll();
+        super.print( );
+    }
 }
