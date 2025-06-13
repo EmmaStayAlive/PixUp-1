@@ -1,11 +1,9 @@
 package org.gerdoc.pixup.jdbc;
-
-import org.gerdoc.pixup.model.Estado;
-
+import org.gerdoc.pixup.model.Disco;
 import java.util.List;
 
-public interface EstadoJdbc
+public interface DiscoJdbc
 {
-    List<Estado> findAll( );
-    boolean save( Estado estado );
+    List<Disco> findAll( );
+    boolean save( Disco disco );
 }

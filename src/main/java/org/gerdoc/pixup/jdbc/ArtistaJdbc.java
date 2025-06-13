@@ -1,4 +1,10 @@
-package org.gerdoc.pixup.jdbc.impl;
+package org.gerdoc.pixup.jdbc;
 
-public interface ArtistaJdbc {
+import org.gerdoc.pixup.model.Artista;
+import java.util.List;
+
+public interface ArtistaJdbc
+{
+    List<Artista> findAll( );
+    boolean save( Artista artista );
 }

@@ -1,8 +1,8 @@
 package org.gerdoc.pixup.jdbc.impl;
 
 import org.gerdoc.pixup.jdbc.Conexion;
-import org.gerdoc.pixup.jdbc.DiscoJdbc;
-import org.gerdoc.pixup.model.Disco;
+import org.gerdoc.pixup.jdbc.ArtistaJdbc;
+import org.gerdoc.pixup.model.Artista;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,27 +11,26 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DiscoJdbcImpl extends Conexion<Disco> implements DiscoJdbc
+public class ArtistaJdbcImpl extends Conexion<Artista> implements ArtistaJdbc
 {
-    private static DiscoJdbc discoJdbc;
+    private static ArtistaJdbc artistaJdbc;
 
-    private DiscoJdbcImpl( )
+    private ArtistaJdbcImpl( )
     {
         super( );
     }
 
-    public static DiscoJdbc getInstance( )
+    public static ArtistaJdbc getInstance( )
     {
-        if( discoJdbc == null ) {
-            discoJdbc = new DiscoJdbcImpl();
+        if( artistaJdbc == null ) {
+            artistaJdbc = new ArtistaJdbcImpl();
         }
-        return discoJdbc;
+        return artistaJdbc;
     }
 
-
-    public List<Disco> findAll() {
-        List<Disco> list = new ArrayList<>();
-        String sql = "SELECT * FROM TAB_DISCO";
+    public List<Artista> findAll() {
+        List<Artista> list = new ArrayList<>();
+        String sql = "SELECT * FROM TAB_ARTISTA";
 
         try {
             if (!openConnection()) {
@@ -42,10 +41,10 @@ public class DiscoJdbcImpl extends Conexion<Disco> implements DiscoJdbc
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
-                Disco disco = new Disco();
-                disco.setId(resultSet.getInt("ID"));
-                disco.setNombre(resultSet.getString("NOMBRE"));
-                list.add(disco);
+                Artista artista = new Artista();
+                artista.setId(resultSet.getInt("ID"));
+                artista.setNombre(resultSet.getString("NOMBRE"));
+                list.add(artista);
             }
 
             resultSet.close();
@@ -57,22 +56,21 @@ public class DiscoJdbcImpl extends Conexion<Disco> implements DiscoJdbc
     }
 
     @Override
-    public boolean save(Disco disco) {
-        String sql = "INSERT INTO tab_disco (NOMBRE) VALUES (?)";
+    public boolean save(Artista artista) {
+        String sql = "INSERT INTO tab_artista (NOMBRE) VALUES (?)";
         int res = 0;
 
         try {
             if (!openConnection()) {
-                System.out.println("Error: La conexión no está abierta.");
                 return false;
             }
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setString(1, disco.getNombre());
+                preparedStatement.setString(1, artista.getNombre());
                 res = preparedStatement.executeUpdate();
             }
 
-            closeConnection();
+            closeConnection(); // Cierra la conexión después de la ejecución
             return res == 1;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -81,11 +79,11 @@ public class DiscoJdbcImpl extends Conexion<Disco> implements DiscoJdbc
     }
 
     public static void main(String[] args) {
-        DiscoJdbc discoJdbc = DiscoJdbcImpl.getInstance();
-        List<Disco> list = discoJdbc.findAll();
-        for(Disco disco :list)
+        ArtistaJdbc artistaJdbc = ArtistaJdbcImpl.getInstance();
+        List<Artista> list = artistaJdbc.findAll();
+        for(Artista artista:list)
         {
-            System.out.println(disco.getId()+" "+ disco.getNombre());
+            System.out.println(artista.getId()+" "+artista.getNombre());
         }
     }
 }

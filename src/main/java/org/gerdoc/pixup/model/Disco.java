@@ -2,9 +2,9 @@ package org.gerdoc.pixup.model;
 
 public class Disco extends Catalogo {
     private String nombre;
-    private String precio;
-    private String existencia;
-    private String descuento;
+    private Double precio;
+    private Integer existencia;
+    private Double descuento;
     private String fecha_lanzamiento;
     private String imagen;
     private Disquera disquera;
@@ -55,19 +55,19 @@ public class Disco extends Catalogo {
         this.fecha_lanzamiento = fecha_lanzamiento;
     }
 
-    public String getDescuento() {
+    public Double getDescuento() {
         return descuento;
     }
 
-    public void setDescuento(String descuento) {
+    public void setDescuento(Double descuento) {
         this.descuento = descuento;
     }
 
-    public String getExistencia() {
+    public Integer getExistencia() {
         return existencia;
     }
 
-    public void setExistencia(String existencia) {
+    public void setExistencia(Integer existencia) {
         this.existencia = existencia;
     }
 
@@ -79,11 +79,11 @@ public class Disco extends Catalogo {
         this.nombre = nombre;
     }
 
-    public String getPrecio() {
+    public Double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(String precio) {
+    public void setPrecio(Double precio) {
         this.precio = precio;
     }
 
@@ -93,9 +93,9 @@ public class Disco extends Catalogo {
                 "         INFORMACIÓN DEL DISCO       \n" +
                 "=====================================\n" +
                 "Nombre:          " + nombre + "\n" +
-                "Artista:         " + artista + "\n" +
-                "Género:          " + genero + "\n" +
-                "Disquera:        " + disquera + "\n" +
+                "         " + artista + "\n" +
+                "          " + genero + "\n" +
+                "       " + disquera + "\n" +
                 "-------------------------------------\n" +
                 "Precio:          $" + precio + "\n" +
                 "Existencias:     " + existencia + "\n" +

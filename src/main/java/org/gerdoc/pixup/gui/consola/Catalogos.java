@@ -13,23 +13,33 @@ public abstract class Catalogos<T extends Catalogo> extends LecturaAccion
     protected T t;
     protected boolean flag2;
 
-    public Catalogos()
-    {
-        list = new ArrayList<>( );
+    public Catalogos() {
+        this.list = new ArrayList<>();
+        System.out.println("Lista inicializada de forma correcta");
+        System.out.println("Estado de la lista: " + list);
+
     }
+
 
     public boolean isListEmpty()
     {
-        return list.isEmpty();
+        return list != null && list.isEmpty();
+
     }
 
     public void print( )
     {
-        if( isListEmpty( ) )
-        {
-            System.out.println( "No hay elementos");
+        if (list == null) {
+            System.out.println("Error: La lista aún no ha sido inicializada.");
+            return;
         }
-        list.stream().forEach( System.out::println );
+
+        if (list.isEmpty()) {
+            System.out.println("No hay Elementos");
+        } else {
+            list.stream().forEach( System.out::println );
+        }
+
     }
 
     public abstract T newT( );
@@ -121,7 +131,7 @@ public abstract class Catalogos<T extends Catalogo> extends LecturaAccion
     @Override
     public void despliegaMenu()
     {
-        System.out.println("Menú de Estado:");
+        System.out.println("Menú:");
         System.out.println("Seleccione una opcion:");
         System.out.println("1.-Agregar");
         System.out.println("2.-Editar");
@@ -141,5 +151,4 @@ public abstract class Catalogos<T extends Catalogo> extends LecturaAccion
     {
         return 5;
     }
-
 }

@@ -24,7 +24,7 @@ public class Consola extends LecturaAccion
     public void despliegaMenu()
     {
         System.out.println("Seleccione una opcion:");
-        System.out.println("1.-Catálogos");
+        System.out.println("1.-Discos");
         System.out.println("2.-Salir");
     }
 

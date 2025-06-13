@@ -1,13 +1,15 @@
 package org.gerdoc.pixup.gui.consola;
 
+import org.gerdoc.pixup.jdbc.DiscoJdbc;
+import org.gerdoc.pixup.jdbc.impl.DiscoJdbcImpl;
 import org.gerdoc.pixup.model.Disco;
 import org.gerdoc.pixup.util.ReadUtil;
 
 public class DiscoCatalogo extends Catalogos<Disco>
 {
     public static DiscoCatalogo discoCatalogo;
-    private DiscoCatalogo( )
-    {
+    private static DiscoJdbc DiscoJdbc;
+    public DiscoCatalogo( ) {
         super();
     }
 
@@ -27,20 +29,45 @@ public class DiscoCatalogo extends Catalogos<Disco>
     }
 
     @Override
-    public boolean processNewT(Disco disco)
-    {
-        System.out.println("Teclee un estado" );
+    public boolean processNewT(Disco disco) {
+        disco = newT();
+        System.out.println("Ingrese el Nombre del Disco" );
         disco.setNombre( ReadUtil.read( ) );
-        return true;
+
+        DiscoJdbc = DiscoJdbcImpl.getInstance();
+        boolean exito = DiscoJdbc.save(disco);
+        if (exito) {
+            System.out.println("Disco Guardado");
+        } else {
+            System.out.println("Disco No Guardado");
+        }
+        return DiscoJdbc != null;
     }
+
 
     @Override
     public void processEditT(Disco disco)
     {
-        System.out.println("Id del Estado " + disco.getId( ) );
-        System.out.println("Estado a editar: " + disco.getNombre( ) );
-        System.out.println("Teclee el valor nuevo del estado" );
+        System.out.println("Id del Disco " + disco.getId( ) );
+        System.out.println("Disco a editar: " + disco.getNombre( ) );
+        System.out.println("Teclee el valor nuevo del Disco" );
         disco.setNombre( ReadUtil.read( ) );
     }
 
+    public boolean loadDiscoJdbc() {
+        DiscoJdbc = DiscoJdbcImpl.getInstance();
+        return DiscoJdbc != null;
+    }
+
+    @Override
+    public void print() {
+        if(DiscoJdbc == null) {
+            if (!loadDiscoJdbc()) {
+                System.out.println("No se pudo cargar el Disco");
+                return;
+            }
+        }
+        list = DiscoJdbc.findAll();
+        super.print();
+    }
 }

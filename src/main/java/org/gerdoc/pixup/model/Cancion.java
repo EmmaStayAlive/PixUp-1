@@ -4,7 +4,7 @@ import java.sql.Time;
 
 public class Cancion extends Catalogo {
     private String Titulo;
-    private Time Duracion;
+    private String Duracion;
     private Disco disco;
 
     public Cancion() {
@@ -18,11 +18,11 @@ public class Cancion extends Catalogo {
         Titulo = titulo;
     }
 
-    public Time getDuracion() {
+    public String getDuracion() {
         return Duracion;
     }
 
-    public void setDuracion(Time duracion) {
+    public void setDuracion(String duracion) {
         Duracion = duracion;
     }
 
