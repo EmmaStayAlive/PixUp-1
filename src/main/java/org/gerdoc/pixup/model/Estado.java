@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,8 +12,8 @@ import lombok.*;
 @ToString(callSuper = true)
 @Entity
 @Table( name = "TBL_ESTADO" )
-public class Estado extends Catalogo
-{
+
+public class Estado extends Catalogo {
     @Column( name ="ESTADO" , nullable = false )
     private String nombre;
 }

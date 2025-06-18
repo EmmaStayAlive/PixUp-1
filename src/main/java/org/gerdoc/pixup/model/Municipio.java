@@ -21,5 +21,4 @@ public class Municipio extends Catalogo
 
     private Estado estado;
 
-
 }
