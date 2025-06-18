@@ -1,7 +1,7 @@
 package org.gerdoc.pixup.gui.consola;
 
 import org.gerdoc.pixup.gui.LecturaAccion;
-import org.gerdoc.pixup.model.Catalogo;
+import org.gerdoc.pixup.modelos.registro.Catalogo;
 import org.gerdoc.pixup.util.ReadUtil;
 
 import java.util.ArrayList;

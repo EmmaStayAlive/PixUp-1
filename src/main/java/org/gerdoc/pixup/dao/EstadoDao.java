@@ -1,8 +1,8 @@
 package org.gerdoc.pixup.dao;
 
-import org.gerdoc.pixup.model.Estado;
-
 import java.util.List;
+
+import org.gerdoc.pixup.modelos.registro.ubiacion.Estado;
 
 public interface EstadoDao
 {

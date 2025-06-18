@@ -1,9 +1,9 @@
 package org.gerdoc.pixup.jdbc;
 
-import org.gerdoc.pixup.model.Estado;
-import org.gerdoc.pixup.model.Municipio;
-
 import java.util.List;
+
+import org.gerdoc.pixup.modelos.registro.ubiacion.Estado;
+import org.gerdoc.pixup.modelos.registro.ubiacion.Municipio;
 
 public interface EstadoJdbc
 {

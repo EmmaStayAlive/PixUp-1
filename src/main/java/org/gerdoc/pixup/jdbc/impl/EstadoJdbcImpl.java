@@ -2,7 +2,7 @@ package org.gerdoc.pixup.jdbc.impl;
 
 import org.gerdoc.pixup.hibernate.HibernateUtil;
 import org.gerdoc.pixup.jdbc.EstadoJdbc;
-import org.gerdoc.pixup.model.Estado;
+import org.gerdoc.pixup.modelos.registro.ubiacion.Estado;
 import org.hibernate.Session;
 
 import java.util.List;

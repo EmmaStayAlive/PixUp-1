@@ -1,6 +1,6 @@
 package org.gerdoc.pixup.gui.consola;
 
-import org.gerdoc.pixup.model.Estado;
+import org.gerdoc.pixup.modelos.registro.ubiacion.Estado;
 import org.gerdoc.pixup.util.ReadUtil;
 
 public class EstadoCatalogo extends Catalogos<Estado>
