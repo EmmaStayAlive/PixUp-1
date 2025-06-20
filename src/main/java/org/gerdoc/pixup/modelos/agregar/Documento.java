@@ -1,4 +1,4 @@
-package org.gerdoc.pixup.modelos.agregar.album;
+package org.gerdoc.pixup.modelos.agregar;
 
 import org.gerdoc.pixup.modelos.registro.Catalogo;
 
@@ -20,23 +20,20 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true) // Indica que se deben comparar los campos de la superclase (Catalogo) para equals y hashCode
 @ToString(callSuper = true) // Indica que se debe incluir la representación en cadena de la superclase (Catalogo) en el método toString
 @Entity // Indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
-@Table( name = "TBL_DISCO" ) // Especifica el nombre de la tabla en la base de datos
+@Table( name = "TBL_DOCUMENTO" ) // Especifica el nombre de la tabla en la base de datos
 
-public class Disco extends Catalogo {
+public class Documento extends Catalogo {
     @Column( name ="NOMBRE" , nullable = false )
     private String nombre;
 
     @Column( name ="DESCRIPCION" )
     private String descripcion;
 
-    @Column( name ="PORTADA" )
-    private String portada;
+    @Column( name ="ARCHIVO" )
+    private String archivo;
 
     @Column( name ="FECHA" )
     private Integer fecha;
-
-    @Column( name ="DURACION" )
-    private Integer duracion;
 
     @ManyToOne()
     private Artista artista;

@@ -1,4 +1,4 @@
-package org.gerdoc.pixup.modelos.agregar.album;
+package org.gerdoc.pixup.modelos.agregar;
 
 import org.gerdoc.pixup.modelos.registro.Catalogo;
 
@@ -7,7 +7,7 @@ import jakarta.persistence.Column;
 
 // Entity indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
 import jakarta.persistence.Entity;
-
+import jakarta.persistence.ManyToOne;
 // Table se utiliza para especificar el nombre de la tabla en la base de datos
 import jakarta.persistence.Table;
 
@@ -20,9 +20,24 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true) // Indica que se deben comparar los campos de la superclase (Catalogo) para equals y hashCode
 @ToString(callSuper = true) // Indica que se debe incluir la representación en cadena de la superclase (Catalogo) en el método toString
 @Entity // Indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
-@Table( name = "TBL_GENERO" ) // Especifica el nombre de la tabla en la base de datos
+@Table( name = "TBL_VIDEO" ) // Especifica el nombre de la tabla en la base de datos
 
-public class Genero extends Catalogo {
-    @Column( name ="DESCRIPCION" , nullable = false )
+public class Video extends Catalogo {
+    @Column( name ="NOMBRE" , nullable = false )
+    private String nombre;
+
+    @Column( name ="DESCRIPCION" )
     private String descripcion;
+
+    @Column( name ="ARCHIVO" )
+    private String archivo;
+
+    @Column( name ="DURACION" )
+    private Integer duracion;
+
+    @ManyToOne()
+    private Artista artista;
+
+    @ManyToOne()
+    private Genero genero;
 }
