@@ -1,4 +1,4 @@
-package org.gerdoc.pixup.modelos.registro.ubiacion;
+package org.gerdoc.pixup.modelos.registro.ubicacion;
 
 import org.gerdoc.pixup.modelos.registro.Catalogo;
 

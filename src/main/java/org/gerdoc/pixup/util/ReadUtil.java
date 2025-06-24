@@ -70,4 +70,25 @@ public class ReadUtil
         }
         return null;
     }
+
+    public static Double readDouble() {
+        String valor = null;
+        boolean flag = true;
+        Double aux = null;
+
+        while (flag) {
+            valor = read();
+            if (valor != null && !valor.isEmpty()) {
+                try {
+                    aux = Double.valueOf(valor);
+                    if (aux != null) {
+                        return aux;
+                    }
+                } catch (Exception e) {
+                }
+            }
+            System.out.println("Valor incorrecto, intentelo nuevamente");
+        }
+        return null;
+    }
 }

@@ -2,12 +2,15 @@ package org.gerdoc.pixup.modelos.registro.notificacion;
 
 import org.gerdoc.pixup.modelos.registro.Catalogo;
 import org.gerdoc.pixup.modelos.registro.Usuario;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 // Colimn sirve para definir las columnas de la tabla en la base de datos
 import jakarta.persistence.Column;
 
 // Entity indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 // Table se utiliza para especificar el nombre de la tabla en la base de datos
 import jakarta.persistence.Table;
@@ -30,9 +33,13 @@ public class Notificacion extends Catalogo {
     @Column( name ="FECHA" , nullable = false )
     private String fecha;
 
-    @ManyToOne()
+    @ManyToOne( targetEntity = Usuario.class, optional = false, fetch = FetchType.EAGER )
+    @Column( name = "TBL_USUARIO_ID", nullable = false )
+    @Fetch(FetchMode.JOIN)
     private Usuario usuario;
 
-    @ManyToOne()
+    @ManyToOne( targetEntity = TNotificacion.class, optional = false, fetch = FetchType.EAGER )
+    @Column( name = "TBL_TNOTIFICACION_ID", nullable = false )
+    @Fetch(FetchMode.JOIN)
     private TNotificacion tNotificacion;
 }

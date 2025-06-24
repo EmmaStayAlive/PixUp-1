@@ -1,15 +1,11 @@
 package org.gerdoc.pixup.modelos.registro;
 
-import org.gerdoc.pixup.modelos.registro.ubiacion.Domicilio;
-
 // Column sirve para definir las columnas de la tabla en la base de datos
 import jakarta.persistence.Column;
 
 // Entity indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
 import jakarta.persistence.Entity;
 
-// ManyToOne indica una relación de muchos a uno entre entidades
-import jakarta.persistence.ManyToOne;
 
 // Table se utiliza para especificar el nombre de la tabla en la base de datos
 import jakarta.persistence.Table;
@@ -44,6 +40,4 @@ public class Usuario extends Catalogo {
     @Column( name ="CONTRASENA" , nullable = false )
     private String contrasena;
 
-    @ManyToOne()
-    private Domicilio domicilio;
 }

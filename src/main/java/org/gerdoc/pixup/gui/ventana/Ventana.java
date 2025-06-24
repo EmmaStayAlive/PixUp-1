@@ -5,28 +5,22 @@ import org.gerdoc.pixup.negocio.Ejecutable;
 public class Ventana implements Ejecutable
 {
     public static Ventana ventana;
-    private boolean flag;
-    private Ventana()
-    {
+
+    private Ventana() {
     }
 
-    public static Ventana getInstance( )
-    {
-        if(ventana==null)
-        {
+    public static Ventana getInstance( ) {
+        if(ventana==null) {
             ventana = new Ventana();
         }
         return ventana;
     }
 
     @Override
-    public void run()
-    {
-
+    public void run() {
     }
 
     @Override
     public void setFlag(boolean flag) {
-        this.flag = flag;
     }
 }

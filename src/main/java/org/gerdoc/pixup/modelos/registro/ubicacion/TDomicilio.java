@@ -1,15 +1,12 @@
-package org.gerdoc.pixup.modelos.registro.ubiacion;
+package org.gerdoc.pixup.modelos.registro.ubicacion;
 
 import org.gerdoc.pixup.modelos.registro.Catalogo;
 
-// Column sirve para definir las columnas de la tabla en la base de datos
+// Colimn sirve para definir las columnas de la tabla en la base de datos
 import jakarta.persistence.Column;
 
 // Entity indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
 import jakarta.persistence.Entity;
-
-// ManyToOne indica una relación de muchos a uno entre entidades
-import jakarta.persistence.ManyToOne;
 
 // Table se utiliza para especificar el nombre de la tabla en la base de datos
 import jakarta.persistence.Table;
@@ -20,18 +17,17 @@ import lombok.*;
 @Data // Genera automáticamente los métodos getter, setter, toString, equals y hashCode
 @AllArgsConstructor // Genera un constructor con todos los campos como parámetros
 @NoArgsConstructor // Genera un constructor sin parámetros
+
+
 @EqualsAndHashCode(callSuper = true) // Indica que se deben comparar los campos de la superclase (Catalogo) para equals y hashCode
 @ToString(callSuper = true) // Indica que se debe incluir la representación en cadena de la superclase (Catalogo) en el método toString
 @Entity // Indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
-@Table( name = "TBL_COLONIA" ) // Especifica el nombre de la tabla en la base de datos
+@Table( name = "TBL_TDOMICILIO" ) // Especifica el nombre de la tabla en la base de datos
 
-public class Colonia extends Catalogo {
-    @Column( name ="COLONIA" , nullable = false )
-    private String nombre;
+public class TDomicilio extends Catalogo {
+    @Column( name ="DESCRIPCION" )
+    private String descripcion;
 
-    @Column( name ="CODIGO_POSTAL" , nullable = false )
-    private String codigoPostal;
-    
-    @ManyToOne()
-    private Municipio municipio;
+    @Column( name ="RUTA" , nullable = false )
+    private String ruta;
 }

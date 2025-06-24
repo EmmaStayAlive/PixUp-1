@@ -6,8 +6,8 @@ public class Inicio
 {
     public static void main( String[] args )
     {
-        System.out.println( "Inicio PixUp" );
+        System.out.println( "Inicio Eufolkia" );
         ConsolaVentana.getInstance( ).run( );
-        System.out.println( "Termino PixUp" );
+        System.out.println( "Termino Eufolkia" );
     }
 }

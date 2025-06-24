@@ -1,12 +1,15 @@
 package org.gerdoc.pixup.modelos.agregar;
 
 import org.gerdoc.pixup.modelos.registro.Catalogo;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 // Colimn sirve para definir las columnas de la tabla en la base de datos
 import jakarta.persistence.Column;
 
 // Entity indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 // Table se utiliza para especificar el nombre de la tabla en la base de datos
 import jakarta.persistence.Table;
@@ -33,11 +36,10 @@ public class Documento extends Catalogo {
     private String archivo;
 
     @Column( name ="FECHA" )
-    private Integer fecha;
+    private String fecha;
 
-    @ManyToOne()
+    @ManyToOne( targetEntity = Artista.class, optional = false, fetch = FetchType.EAGER )
+    @Column( name = "TBL_ARTISTA_ID", nullable = false )
+    @Fetch(FetchMode.JOIN)
     private Artista artista;
-
-    @ManyToOne()
-    private Genero genero;
 }

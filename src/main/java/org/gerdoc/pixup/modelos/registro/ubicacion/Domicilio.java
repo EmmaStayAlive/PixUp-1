@@ -1,13 +1,16 @@
-package org.gerdoc.pixup.modelos.registro.ubiacion;
+package org.gerdoc.pixup.modelos.registro.ubicacion;
 
 import org.gerdoc.pixup.modelos.registro.Catalogo;
+import org.gerdoc.pixup.modelos.registro.Usuario;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 // Column sirve para definir las columnas de la tabla en la base de datos
 import jakarta.persistence.Column;
 
 // Entity indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
 import jakarta.persistence.Entity;
-
+import jakarta.persistence.FetchType;
 // ManyToOne indica una relación de muchos a uno entre entidades
 import jakarta.persistence.ManyToOne;
 
@@ -35,12 +38,20 @@ public class Domicilio extends Catalogo {
     @Column( name ="NUMERO_INTERIOR" )
     private String numeroInterior;
     
-    @ManyToOne()
+    @ManyToOne( targetEntity = Colonia.class, optional = false, fetch = FetchType.EAGER )
+    @Column( name = "TBL_COLONIA_ID", nullable = false )
+    @Fetch(FetchMode.JOIN)
     private Colonia colonia;
-    
-    @ManyToOne()
-    private Municipio municipio;
 
-    @ManyToOne()
+    @ManyToOne( targetEntity = TDomicilio.class, optional = false, fetch = FetchType.EAGER )
+    @Column( name = "TBL_TDOMICILIO_ID", nullable = false )
+    @Fetch(FetchMode.JOIN)
     private TDomicilio tDomicilio;
+
+    @ManyToOne( targetEntity = Usuario.class, optional = false, fetch = FetchType.EAGER )
+    @Column( name = "TBL_USUARIO_ID", nullable = false )
+    @Fetch(FetchMode.JOIN)
+    private Usuario usuario;
+
+    
 }

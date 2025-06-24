@@ -1,12 +1,22 @@
 package org.gerdoc.pixup.hibernate;
 
+// Session permite interactuar con la base de datos
 import org.hibernate.Session;
+
+// SessionFactory es una fabrica de sesiones, se usa para crear sesiones
 import org.hibernate.SessionFactory;
+
+// MetadataSources permite construir metadatos de la base de datos
 import org.hibernate.boot.MetadataSources;
+
+// StandardServiceRegistry es un registro de servicios estandarizado, se usa para configurar Hibernate
 import org.hibernate.boot.registry.StandardServiceRegistry;
+
+// StandardServiceRegistryBuilder permite construir un StandardServiceRegistry, es decir un registro de servicios para Hibernate
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 public final class HibernateUtil {
+
 	private static SessionFactory sessionFactory;
 	private static StandardServiceRegistry registry;
 	

@@ -1,7 +1,7 @@
 package org.gerdoc.pixup.jdbc.impl;
 
 import org.gerdoc.pixup.jdbc.EstadoJdbc;
-import org.gerdoc.pixup.modelos.registro.ubiacion.Estado;
+import org.gerdoc.pixup.modelos.registro.ubicacion.Estado;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

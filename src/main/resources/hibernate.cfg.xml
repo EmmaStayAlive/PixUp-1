@@ -5,10 +5,10 @@
 <hibernate-configuration>
 	<session-factory>
 		<property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/pixup</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/eufolkia</property>
 		<property name="hibernate.connection.username">root</property>
-		<property name="hibernate.connection.password">1234</property>
-		<property name="hibernate.default_schema">pixup</property>
+		<property name="hibernate.connection.password">n0m3l0</property>
+		<property name="hibernate.default_schema">eufolkia</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
 		<!-- JDBC connection pool (use the built-in) -->
 		<property name="connection.pool.size">1</property>
@@ -20,7 +20,21 @@
 		<!-- Drop and re-create the database schema on startup -->
 		<property name="hbm2ddl.auto">none</property>
 		<property name="hibernate.transform_hbm_xml.enabled">true</property>
-		<mapping class="org.gerdoc.pixup.model.Estado"/>
 
+		<mapping class="org.gerdoc.pixup.modelos.registro.ubicacion.Estado"/>
+		<mapping class="org.gerdoc.pixup.modelos.registro.ubicacion.Municipio"/>
+		<mapping class="org.gerdoc.pixup.modelos.registro.ubicacion.Colonia"/>
+		<mapping class="org.gerdoc.pixup.modelos.registro.ubicacion.Domicilio"/>
+		<mapping class="org.gerdoc.pixup.modelos.registro.ubicacion.TDomicilio"/>
+		<mapping class="org.gerdoc.pixup.modelos.registro.Usuario"/>
+		<mapping class="org.gerdoc.pixup.modelos.registro.notificacion.Notificacion"/>
+		<mapping class="org.gerdoc.pixup.modelos.registro.notificacion.TNotificacion"/>
+		<mapping class="org.gerdoc.pixup.modelos.agregar.Artista"/>
+		<mapping class="org.gerdoc.pixup.modelos.agregar.Genero"/>
+		<mapping class="org.gerdoc.pixup.modelos.agregar.Video"/>
+		<mapping class="org.gerdoc.pixup.modelos.agregar.ProductoServicio"/>
+		<mapping class="org.gerdoc.pixup.modelos.agregar.Documento"/>
+		<mapping class="org.gerdoc.pixup.modelos.agregar.Disco"/>
+		<mapping class="org.gerdoc.pixup.modelos.agregar.Cancion"/>
     </session-factory>
 </hibernate-configuration>

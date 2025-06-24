@@ -1,14 +1,16 @@
-package org.gerdoc.pixup.modelos.registro.ubiacion;
+package org.gerdoc.pixup.modelos.agregar;
 
 import org.gerdoc.pixup.modelos.registro.Catalogo;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
-// Column sirve para definir las columnas de la tabla en la base de datos
+// Colimn sirve para definir las columnas de la tabla en la base de datos
 import jakarta.persistence.Column;
 
 // Entity indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
 import jakarta.persistence.Entity;
-
-// ManyToOne indica una relación de muchos a uno entre entidades
+import jakarta.persistence.FetchType;
+// ManyToOne indica una relación de muchos a uno con otra entidad
 import jakarta.persistence.ManyToOne;
 
 // Table se utiliza para especificar el nombre de la tabla en la base de datos
@@ -23,12 +25,26 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true) // Indica que se deben comparar los campos de la superclase (Catalogo) para equals y hashCode
 @ToString(callSuper = true) // Indica que se debe incluir la representación en cadena de la superclase (Catalogo) en el método toString
 @Entity // Indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
-@Table( name = "TBL_MUNICIPIO" ) // Especifica el nombre de la tabla en la base de datos
+@Table( name = "TBL_PRODUCTOSERVICIO" ) // Especifica el nombre de la tabla en la base de datos
 
-public class Municipio extends Catalogo {
-    @Column( name ="MUNICIPIO" , nullable = false )
+public class ProductoServicio extends Catalogo {
+    @Column( name ="NOMBRE" , nullable = false )
     private String nombre;
 
-    @ManyToOne()
-    private Estado estado;
+    @Column( name ="DESCRIPCION" )
+    private String descripcion;
+
+    @Column( name ="PRECIO" )
+    private Double precio;
+
+    @Column( name ="CANTIDAD" )
+    private Integer cantidad;
+
+    @Column( name ="IMAGEN" )
+    private String imagen;
+    
+    @ManyToOne( targetEntity = Artista.class, optional = false, fetch = FetchType.EAGER )
+    @Column( name = "TBL_ARTISTA_ID", nullable = false )
+    @Fetch(FetchMode.JOIN)
+    private Artista artista;
 }

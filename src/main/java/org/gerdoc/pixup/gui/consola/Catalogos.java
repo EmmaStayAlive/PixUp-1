@@ -7,27 +7,22 @@ import org.gerdoc.pixup.util.ReadUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Catalogos<T extends Catalogo> extends LecturaAccion
-{
+public abstract class Catalogos<T extends Catalogo> extends LecturaAccion {
     protected List<T>list;
     protected T t;
     protected boolean flag2;
 
-    public Catalogos()
-    {
+    public Catalogos() {
         list = new ArrayList<>( );
     }
 
-    public boolean isListEmpty()
-    {
+    public boolean isListEmpty() {
         return list.isEmpty();
     }
 
-    public void print( )
-    {
-        if( isListEmpty( ) )
-        {
-            System.out.println( "No hay elementos");
+    public void print( ) {
+        if( isListEmpty( ) ) {
+            System.out.println( "Sin elementos");
         }
         list.stream().forEach( System.out::println );
     }
@@ -36,73 +31,59 @@ public abstract class Catalogos<T extends Catalogo> extends LecturaAccion
     public abstract boolean processNewT( T t );
     public abstract void processEditT( T t );
 
-    public void add( )
-    {
+    public void add( ) {
         t = newT( );
-        if( processNewT( t ) )
-        {
+        if( processNewT( t ) ) {
             t.setId( list.size( ) + 1 );
             list.add( t );
         }
     }
 
-    public void edit( )
-    {
-        if( isListEmpty( ) )
-        {
-            System.out.println( "No hay elementos" );
+    public void edit( ) {
+        if( isListEmpty( ) ) {
+            System.out.println( "Sin elementos" );
             return;
         }
         flag2 = true;
-        while ( flag2 )
-        {
-            System.out.println( "Ingrese el id del elemento a editar" );
+        while ( flag2 ) {
+            System.out.println( "Ingresa un ID para Editar" );
             print( );
             t = list.stream().filter( e -> e.getId().equals( ReadUtil.readInt( ) ) ).findFirst().orElse( null );
-            if( t == null )
-            {
-                System.out.println( "Id incorrecto, intentelo nuevamente" );
+            if( t == null ) {
+                System.out.println( "ID invalido" );
             }
-            else
-            {
+            else {
                 processEditT( t );
                 flag2 = false;
-                System.out.println( "Elemento modificado" );
+                System.out.println( "Elemento Actualizado" );
             }
         }
     }
 
-    public void remove( )
-    {
-        if( isListEmpty( ) )
-        {
-            System.out.println( "No hay elementos" );
+    public void remove( ) {
+        if( isListEmpty( ) ) {
+            System.out.println( "Sin elementos" );
             return;
         }
         flag2 = true;
-        while ( flag2 )
-        {
-            System.out.println( "Ingrese el id del elemento a borrar" );
+        while ( flag2 ) {
+            System.out.println( "Ingresa un ID para Borrar" );
             print( );
             t = list.stream().filter( e -> e.getId().equals( ReadUtil.readInt( ) ) ).findFirst().orElse( null );
-            if( t==null )
-            {
-                System.out.println( "Id incorrecto, intentelo nuevamente" );
+            if( t==null ) {
+                System.out.println( "ID invalido" );
             }
-            else
-            {
+            else {
                 list.remove( t );
                 flag2 = false;
-                System.out.println( "Elemento borrado" );
+                System.out.println( "Elemento Borrado" );
             }
         }
     }
 
     @Override
-    public void procesaOpcion()
-    {
-        switch (opcion)
-        {
+    public void procesaOpcion() {
+        switch (opcion) {
             case 1:
                 add( );
                 break;
@@ -119,8 +100,7 @@ public abstract class Catalogos<T extends Catalogo> extends LecturaAccion
     }
 
     @Override
-    public void despliegaMenu()
-    {
+    public void despliegaMenu() {
         System.out.println("Menú de Estado:");
         System.out.println("Seleccione una opcion:");
         System.out.println("1.-Agregar");
@@ -131,15 +111,12 @@ public abstract class Catalogos<T extends Catalogo> extends LecturaAccion
     }
 
     @Override
-    public int valorMinMenu( )
-    {
+    public int valorMinMenu( ) {
         return 1;
     }
 
     @Override
-    public int valorMaxMenu()
-    {
+    public int valorMaxMenu() {
         return 5;
     }
-
 }

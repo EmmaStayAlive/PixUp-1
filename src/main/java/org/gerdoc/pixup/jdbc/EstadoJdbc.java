@@ -2,11 +2,9 @@ package org.gerdoc.pixup.jdbc;
 
 import java.util.List;
 
-import org.gerdoc.pixup.modelos.registro.ubiacion.Estado;
-import org.gerdoc.pixup.modelos.registro.ubiacion.Municipio;
+import org.gerdoc.pixup.modelos.registro.ubicacion.Estado;
 
-public interface EstadoJdbc
-{
+public interface EstadoJdbc {
     List<Estado> findAll( );
     boolean save( Estado estado );
     boolean update( Estado estado );
