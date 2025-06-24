@@ -10,6 +10,7 @@ import jakarta.persistence.Column;
 // Entity indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 // ManyToOne indica una relación de muchos a uno entre entidades
 import jakarta.persistence.ManyToOne;
 
@@ -31,8 +32,8 @@ public class Municipio extends Catalogo {
     @Column( name ="MUNICIPIO" , nullable = false )
     private String nombre;
 
-    @ManyToOne( targetEntity = Estado.class, optional = false, fetch = FetchType.EAGER )
-    @Column( name = "TBL_ESTADO_ID", nullable = false )
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "TBL_ESTADO_ID", nullable = false)
     @Fetch(FetchMode.JOIN)
     private Estado estado;
 }

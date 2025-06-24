@@ -1,23 +1,24 @@
 package org.gerdoc.pixup.gui.consola.Catalogo;
 
 import org.gerdoc.pixup.gui.consola.Catalogos;
-import org.gerdoc.pixup.hibernate.HibernateUtil;
-import org.gerdoc.pixup.modelos.agregar.ProductoServicio;
+import org.gerdoc.pixup.jdbc.impl.ArtistaJdbcImpl;
+import org.gerdoc.pixup.jdbc.impl.ProductoServicioJdbcImpl;
 import org.gerdoc.pixup.modelos.agregar.Artista;
+import org.gerdoc.pixup.modelos.agregar.ProductoServicio;
 import org.gerdoc.pixup.util.ReadUtil;
 
-public class ProductoServicioCatalogo extends Catalogos<ProductoServicio> {
-    public static ProductoServicioCatalogo productoServicioCatalogo;
+import java.util.List;
 
-    private ProductoServicioCatalogo() {
-        super();
-    }
+public class ProductoServicioCatalogo extends Catalogos<ProductoServicio> {
+    private static ProductoServicioCatalogo instancia;
+
+    private ProductoServicioCatalogo() {}
 
     public static ProductoServicioCatalogo getInstance() {
-        if (productoServicioCatalogo == null) {
-            productoServicioCatalogo = new ProductoServicioCatalogo();
+        if (instancia == null) {
+            instancia = new ProductoServicioCatalogo();
         }
-        return productoServicioCatalogo;
+        return instancia;
     }
 
     @Override
@@ -26,54 +27,106 @@ public class ProductoServicioCatalogo extends Catalogos<ProductoServicio> {
     }
 
     @Override
-    public boolean processNewT(ProductoServicio productoServicio) {
+    public boolean processNewT(ProductoServicio ps) {
+        System.out.println("Nombre del producto o servicio:");
+        ps.setNombre(ReadUtil.read());
 
-        System.out.println("Ingresa el Nombre del Producto/Servicio");
-        productoServicio.setNombre(ReadUtil.read());
+        System.out.println("Descripción (opcional):");
+        ps.setDescripcion(ReadUtil.read());
 
-        System.out.println("Ingresa la Descripción del Producto/Servicio");
-        productoServicio.setDescripcion(ReadUtil.read());
+        System.out.println("Precio:");
+        ps.setPrecio(ReadUtil.readDouble());
 
-        System.out.println("Ingresa el Precio del Producto/Servicio");
-        productoServicio.setPrecio(Double.parseDouble(ReadUtil.read()));
+        System.out.println("Cantidad disponible:");
+        ps.setCantidad(ReadUtil.readInt());
 
-        System.out.println("Ingresa la Cantidad del Producto/Servicio disponible");
-        productoServicio.setCantidad(Integer.parseInt(ReadUtil.read()));
-        
-        System.out.println("Ingresa la URL de la Imagen del Producto/Servicio (opcional, presiona Enter para omitir)");
-        productoServicio.setImagen(ReadUtil.read());
+        System.out.println("Ruta de la imagen (opcional):");
+        ps.setImagen(ReadUtil.read());
 
-        System.out.println("Ingresa el Id del Artista asociado al Producto/Servicio");
-        int idArtista = Integer.parseInt(ReadUtil.read());
-        Artista artista = HibernateUtil.getSession().find(Artista.class, idArtista);
-        productoServicio.setArtista(artista);
+        System.out.println("ID del artista:");
+        Artista artista = ArtistaJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (artista == null) {
+            System.out.println("Artista no encontrado.");
+            return false;
+        }
+        ps.setArtista(artista);
 
-        return true;
+        return ProductoServicioJdbcImpl.getInstance().save(ps);
     }
 
     @Override
-    public void processEditT(ProductoServicio productoServicio) {
-        System.out.println("ID del Producto/Servicio: " + productoServicio.getId());
-        System.out.println("Nombre del Producto/Servicio a editar: " + productoServicio.getNombre());
+    public void processEditT(ProductoServicio ps) {
+        System.out.println("ID: " + ps.getId());
 
-        System.out.println("Ingresa el nuevo Nombre del Producto/Servicio (presiona Enter para mantener el actual)");
-        productoServicio.setNombre(ReadUtil.read());
+        System.out.println("Nuevo nombre [" + ps.getNombre() + "]:");
+        ps.setNombre(ReadUtil.read());
 
-        System.out.println("Ingresa la nueva Descripción del Producto/Servicio (presiona Enter para mantener la actual)");
-        productoServicio.setDescripcion(ReadUtil.read());
+        System.out.println("Nueva descripción:");
+        ps.setDescripcion(ReadUtil.read());
 
-        System.out.println("Ingresa el nuevo Precio del Producto/Servicio (presiona Enter para mantener el actual)");
-        productoServicio.setPrecio(ReadUtil.readDouble());
+        System.out.println("Nuevo precio:");
+        ps.setPrecio(ReadUtil.readDouble());
 
-        System.out.println("Ingresa la nueva Cantidad del Producto/Servicio disponible (presiona Enter para mantener la actual)");
-        productoServicio.setCantidad(ReadUtil.readInt());
+        System.out.println("Nueva cantidad:");
+        ps.setCantidad(ReadUtil.readInt());
 
-        System.out.println("Ingresa la nueva URL de la Imagen del Producto/Servicio (presiona Enter para mantener la actual)");
-        productoServicio.setImagen(ReadUtil.read());
+        System.out.println("Nueva imagen:");
+        ps.setImagen(ReadUtil.read());
 
-        System.out.println("Ingresa el Id del nuevo Propietario del Producto/Servicio (Artista)");
-        int idArtista = Integer.parseInt(ReadUtil.read());
-        Artista artista = HibernateUtil.getSession().find(Artista.class, idArtista);
-        productoServicio.setArtista(artista);
+        System.out.println("Nuevo ID de artista:");
+        Artista artista = ArtistaJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (artista != null) {
+            ps.setArtista(artista);
+        }
+
+        if (ProductoServicioJdbcImpl.getInstance().update(ps)) {
+            System.out.println("Producto/Servicio actualizado.");
+        } else {
+            System.out.println("No se pudo actualizar.");
+        }
+    }
+
+    @Override
+    public void print() {
+        List<ProductoServicio> lista = ProductoServicioJdbcImpl.getInstance().findAll();
+        if (lista.isEmpty()) {
+            System.out.println("No hay productos o servicios registrados.");
+        } else {
+            lista.forEach(System.out::println);
+        }
+    }
+
+    @Override
+    public void add() {
+        ProductoServicio ps = newT();
+        if (processNewT(ps)) {
+            System.out.println("Producto o servicio guardado correctamente.");
+        } else {
+            System.out.println("No se pudo guardar.");
+        }
+    }
+
+    @Override
+    public void edit() {
+        print();
+        System.out.println("ID del producto o servicio a editar:");
+        ProductoServicio ps = ProductoServicioJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (ps != null) {
+            processEditT(ps);
+        } else {
+            System.out.println("No se encontró el registro.");
+        }
+    }
+
+    @Override
+    public void remove() {
+        print();
+        System.out.println("ID del producto o servicio a eliminar:");
+        ProductoServicio ps = ProductoServicioJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (ps != null && ProductoServicioJdbcImpl.getInstance().delete(ps)) {
+            System.out.println("Eliminado correctamente.");
+        } else {
+            System.out.println("No se pudo eliminar.");
+        }
     }
 }

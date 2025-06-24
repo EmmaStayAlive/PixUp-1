@@ -2,7 +2,7 @@ package org.gerdoc.pixup.modelos.registro.ubicacion;
 
 import org.gerdoc.pixup.modelos.registro.Catalogo;
 
-// Colimn sirve para definir las columnas de la tabla en la base de datos
+// Column sirve para definir las columnas de la tabla en la base de datos
 import jakarta.persistence.Column;
 
 // Entity indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 // Lombok es una biblioteca que ayuda a reducir el código boilerplate en Java
 import lombok.*;
 
+
 @Data // Genera automáticamente los métodos getter, setter, toString, equals y hashCode
 @AllArgsConstructor // Genera un constructor con todos los campos como parámetros
 @NoArgsConstructor // Genera un constructor sin parámetros
@@ -23,6 +24,6 @@ import lombok.*;
 @Table( name = "TBL_ESTADO" ) // Especifica el nombre de la tabla en la base de datos
 
 public class Estado extends Catalogo {
-    @Column( name ="ESTADO" , nullable = false )
+    @Column( name ="ESTADO" , nullable = false)
     private String nombre;
 }

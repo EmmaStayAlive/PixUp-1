@@ -12,7 +12,7 @@ import jakarta.persistence.Entity;
 
 // 
 import jakarta.persistence.FetchType;
-
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 // Table se utiliza para especificar el nombre de la tabla en la base de datos
 import jakarta.persistence.Table;
@@ -35,8 +35,8 @@ public class Cancion extends Catalogo {
     @Column( name ="DURACION" , nullable = false )
     private String duracion;
 
-    @ManyToOne( targetEntity = Disco.class, optional = false, fetch = FetchType.EAGER)
-    @Column( name = "TBL_DISCO_ID", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "TBL_DISCO_ID", nullable = false)
     @Fetch(FetchMode.JOIN)
     private Disco disco;
 }

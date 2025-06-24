@@ -1,23 +1,24 @@
 package org.gerdoc.pixup.gui.consola.Catalogo;
 
 import org.gerdoc.pixup.gui.consola.Catalogos;
-import org.gerdoc.pixup.hibernate.HibernateUtil;
+import org.gerdoc.pixup.jdbc.impl.ArtistaJdbcImpl;
+import org.gerdoc.pixup.jdbc.impl.DocumentoJdbcImpl;
 import org.gerdoc.pixup.modelos.agregar.Artista;
 import org.gerdoc.pixup.modelos.agregar.Documento;
 import org.gerdoc.pixup.util.ReadUtil;
 
-public class DocumentoCatalogo extends Catalogos<Documento> {
-    public static DocumentoCatalogo documentoCatalogo;
+import java.util.List;
 
-    private DocumentoCatalogo() {
-        super();
-    }
+public class DocumentoCatalogo extends Catalogos<Documento> {
+    private static DocumentoCatalogo instancia;
+
+    private DocumentoCatalogo() {}
 
     public static DocumentoCatalogo getInstance() {
-        if (documentoCatalogo == null) {
-            documentoCatalogo = new DocumentoCatalogo();
+        if (instancia == null) {
+            instancia = new DocumentoCatalogo();
         }
-        return documentoCatalogo;
+        return instancia;
     }
 
     @Override
@@ -27,47 +28,99 @@ public class DocumentoCatalogo extends Catalogos<Documento> {
 
     @Override
     public boolean processNewT(Documento documento) {
-
-        System.out.println("Ingresa el Nombre del Documento");
+        System.out.println("Nombre del documento:");
         documento.setNombre(ReadUtil.read());
 
-        System.out.println("Ingresa la Descripción del Documento");
+        System.out.println("Descripción (opcional):");
         documento.setDescripcion(ReadUtil.read());
 
-        System.out.println("Ingresa la URL del Archivo del Documento");
+        System.out.println("Ruta del archivo:");
         documento.setArchivo(ReadUtil.read());
 
-        System.out.println("Ingresa la Fecha de Creación del Documento (en formato YYYYMMDD)");
+        System.out.println("Fecha (ej. 2025-06-24):");
         documento.setFecha(ReadUtil.read());
 
-        System.out.println("Ingresa el Id del Artista asociado al Documento");
-        int idArtista = Integer.parseInt(ReadUtil.read());
-        Artista artista = HibernateUtil.getSession().find(Artista.class, idArtista);
+        System.out.println("ID del artista:");
+        Artista artista = ArtistaJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (artista == null) {
+            System.out.println("Artista no encontrado.");
+            return false;
+        }
         documento.setArtista(artista);
 
-        return true;
+        return DocumentoJdbcImpl.getInstance().save(documento);
     }
 
     @Override
     public void processEditT(Documento documento) {
-        System.out.println("ID del Documento: " + documento.getId());
-        System.out.println("Nombre del Documento a editar: " + documento.getNombre());
+        System.out.println("Editar Documento ID: " + documento.getId());
 
-        System.out.println("Ingresa el nuevo Nombre del Documento (presiona Enter para mantener el actual)");
+        System.out.println("Nuevo nombre [" + documento.getNombre() + "]:");
         documento.setNombre(ReadUtil.read());
 
-        System.out.println("Ingresa la nueva Descripción del Documento (presiona Enter para mantener la actual)");
+        System.out.println("Nueva descripción:");
         documento.setDescripcion(ReadUtil.read());
 
-        System.out.println("Ingresa la nueva URL del Archivo del Documento (presiona Enter para mantener la actual)");
+        System.out.println("Nueva ruta del archivo:");
         documento.setArchivo(ReadUtil.read());
 
-        System.out.println("Ingresa la nueva Fecha de Creación del Documento (en formato YYYYMMDD, presiona Enter para mantener la actual)");
+        System.out.println("Nueva fecha:");
         documento.setFecha(ReadUtil.read());
 
-        System.out.println("Ingresa el nuevo Id del Artista asociado al Documento (presiona Enter para mantener el actual)");
-        int idArtista = Integer.parseInt(ReadUtil.read());
-        Artista artista = HibernateUtil.getSession().find(Artista.class, idArtista);
-        documento.setArtista(artista);
+        System.out.println("Nuevo ID de artista:");
+        Artista artista = ArtistaJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (artista != null) {
+            documento.setArtista(artista);
+        }
+
+        if (DocumentoJdbcImpl.getInstance().update(documento)) {
+            System.out.println("Documento actualizado correctamente.");
+        } else {
+            System.out.println("No se pudo actualizar.");
+        }
+    }
+
+    @Override
+    public void print() {
+        List<Documento> documentos = DocumentoJdbcImpl.getInstance().findAll();
+        if (documentos.isEmpty()) {
+            System.out.println("No hay documentos registrados.");
+        } else {
+            documentos.forEach(System.out::println);
+        }
+    }
+
+    @Override
+    public void add() {
+        Documento documento = newT();
+        if (processNewT(documento)) {
+            System.out.println("Documento guardado correctamente.");
+        } else {
+            System.out.println("No se pudo guardar el documento.");
+        }
+    }
+
+    @Override
+    public void edit() {
+        print();
+        System.out.println("ID del documento a editar:");
+        Documento documento = DocumentoJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (documento != null) {
+            processEditT(documento);
+        } else {
+            System.out.println("Documento no encontrado.");
+        }
+    }
+
+    @Override
+    public void remove() {
+        print();
+        System.out.println("ID del documento a eliminar:");
+        Documento documento = DocumentoJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (documento != null && DocumentoJdbcImpl.getInstance().delete(documento)) {
+            System.out.println("Documento eliminado.");
+        } else {
+            System.out.println("No se pudo eliminar.");
+        }
     }
 }

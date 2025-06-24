@@ -1,24 +1,26 @@
 package org.gerdoc.pixup.gui.consola.Catalogo;
 
 import org.gerdoc.pixup.gui.consola.Catalogos;
-import org.gerdoc.pixup.hibernate.HibernateUtil;
-import org.gerdoc.pixup.modelos.agregar.Genero;
-import org.gerdoc.pixup.modelos.agregar.Disco;
+import org.gerdoc.pixup.jdbc.impl.ArtistaJdbcImpl;
+import org.gerdoc.pixup.jdbc.impl.DiscoJdbcImpl;
+import org.gerdoc.pixup.jdbc.impl.GeneroJdbcImpl;
 import org.gerdoc.pixup.modelos.agregar.Artista;
+import org.gerdoc.pixup.modelos.agregar.Disco;
+import org.gerdoc.pixup.modelos.agregar.Genero;
 import org.gerdoc.pixup.util.ReadUtil;
 
-public class DiscoCatalogo extends Catalogos<Disco> {
-    public static DiscoCatalogo discoCatalogo;
+import java.util.List;
 
-    private DiscoCatalogo() {
-        super();
-    }
+public class DiscoCatalogo extends Catalogos<Disco> {
+    private static DiscoCatalogo instancia;
+
+    private DiscoCatalogo() {}
 
     public static DiscoCatalogo getInstance() {
-        if (discoCatalogo == null) {
-            discoCatalogo = new DiscoCatalogo();
+        if (instancia == null) {
+            instancia = new DiscoCatalogo();
         }
-        return discoCatalogo;
+        return instancia;
     }
 
     @Override
@@ -28,64 +30,121 @@ public class DiscoCatalogo extends Catalogos<Disco> {
 
     @Override
     public boolean processNewT(Disco disco) {
-
-        System.out.println("Ingresa el Nombre del Disco");
+        System.out.println("Nombre del disco:");
         disco.setNombre(ReadUtil.read());
 
-        System.out.println("Ingresa la Descripción del Disco (opcional)");
+        System.out.println("Descripción (opcional):");
         disco.setDescripcion(ReadUtil.read());
 
-        System.out.println("Ingresa la URL de la Portada del Disco (opcional)");
+        System.out.println("Ruta de la portada (opcional):");
         disco.setPortada(ReadUtil.read());
 
-        System.out.println("Ingresa el Año de Publicación del Disco (YYYY)");
+        System.out.println("Fecha de lanzamiento (ej. 2025-06-24):");
         disco.setFecha(ReadUtil.read());
 
-        System.out.println("Ingresa la Duración del Disco en minutos");
+        System.out.println("Duración total del disco (ej. 42:15):");
         disco.setDuracion(ReadUtil.read());
 
-        System.out.println("Ingresa el Id del Artista asociado al Disco");
-        int idArtista = Integer.parseInt(ReadUtil.read());
-        Artista artista = HibernateUtil.getSession().find(Artista.class, idArtista);
+        System.out.println("ID del artista:");
+        Artista artista = ArtistaJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (artista == null) {
+            System.out.println("Artista no encontrado.");
+            return false;
+        }
         disco.setArtista(artista);
 
-        System.out.println("Ingresa el Id del Género del Disco");
-        int idGenero = Integer.parseInt(ReadUtil.read());
-        Genero genero = HibernateUtil.getSession().find(Genero.class, idGenero);
+        System.out.println("ID del género:");
+        Genero genero = GeneroJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (genero == null) {
+            System.out.println("Género no encontrado.");
+            return false;
+        }
         disco.setGenero(genero);
 
-        return true;
+        return DiscoJdbcImpl.getInstance().save(disco);
     }
 
     @Override
     public void processEditT(Disco disco) {
+        System.out.println("Editar disco ID: " + disco.getId());
 
-        System.out.println("ID del Disco: " + disco.getId());
-        System.out.println("Nombre del Disco a editar: " + disco.getNombre());
-
-        System.out.println("Ingresa el nuevo Nombre del Disco (presiona Enter para mantener el actual)");
+        System.out.println("Nuevo nombre [" + disco.getNombre() + "]:");
         disco.setNombre(ReadUtil.read());
 
-        System.out.println("Ingresa la nueva Descripción del Disco (presiona Enter para mantener la actual)");
+        System.out.println("Nueva descripción:");
         disco.setDescripcion(ReadUtil.read());
 
-        System.out.println("Ingresa la nueva URL de la Portada del Disco (presiona Enter para mantener la actual)");
+        System.out.println("Nueva ruta de portada:");
         disco.setPortada(ReadUtil.read());
 
-        System.out.println("Ingresa el nuevo Año de Publicación del Disco (YYYY, presiona Enter para mantener el actual)");
+        System.out.println("Nueva fecha:");
         disco.setFecha(ReadUtil.read());
 
-        System.out.println("Ingresa la nueva Duración del Disco en minutos (presiona Enter para mantener la actual)");
+        System.out.println("Nueva duración:");
         disco.setDuracion(ReadUtil.read());
 
-        System.out.println("Ingresa el nuevo Id del Artista asociado al Disco (presiona Enter para mantener el actual)");
-        int idArtista = Integer.parseInt(ReadUtil.read());
-        Artista artista = HibernateUtil.getSession().find(Artista.class, idArtista);
-        disco.setArtista(artista);
+        System.out.println("Nuevo ID de artista:");
+        Artista artista = ArtistaJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (artista != null) {
+            disco.setArtista(artista);
+        }
 
-        System.out.println("Ingresa el nuevo Id del Género del Disco (presiona Enter para mantener el actual)");
-        int idGenero = Integer.parseInt(ReadUtil.read());
-        Genero genero = HibernateUtil.getSession().find(Genero.class, idGenero);
-        disco.setGenero(genero);
+        System.out.println("Nuevo ID de género:");
+        Genero genero = GeneroJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (genero != null) {
+            disco.setGenero(genero);
+        }
+
+        if (DiscoJdbcImpl.getInstance().update(disco)) {
+            System.out.println("Disco actualizado.");
+        } else {
+            System.out.println("Error al actualizar.");
+        }
+    }
+
+    @Override
+    public void print() {
+        List<Disco> discos = DiscoJdbcImpl.getInstance().findAll();
+        if (discos.isEmpty()) {
+            System.out.println("No hay discos registrados.");
+        } else {
+            discos.forEach(System.out::println);
+        }
+    }
+
+    @Override
+    public void add() {
+        Disco disco = newT();
+        if (processNewT(disco)) {
+            System.out.println("Disco guardado exitosamente.");
+        } else {
+            System.out.println("No se guardó el disco.");
+        }
+    }
+
+    @Override
+    public void edit() {
+        print();
+        System.out.println("ID del disco a editar:");
+        int id = ReadUtil.readInt();
+        Disco disco = DiscoJdbcImpl.getInstance().findById(id);
+        if (disco != null) {
+            processEditT(disco);
+        } else {
+            System.out.println("Disco no encontrado.");
+        }
+    }
+
+    @Override
+    public void remove() {
+        print();
+        System.out.println("ID del disco a eliminar:");
+        int id = ReadUtil.readInt();
+        Disco disco = DiscoJdbcImpl.getInstance().findById(id);
+        if (disco != null && DiscoJdbcImpl.getInstance().delete(disco)) {
+            System.out.println("Disco eliminado correctamente.");
+        } else {
+            System.out.println("No se pudo eliminar.");
+        }
     }
 }

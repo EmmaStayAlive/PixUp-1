@@ -1,24 +1,26 @@
 package org.gerdoc.pixup.gui.consola.Catalogo;
 
 import org.gerdoc.pixup.gui.consola.Catalogos;
-import org.gerdoc.pixup.hibernate.HibernateUtil;
+import org.gerdoc.pixup.jdbc.impl.ArtistaJdbcImpl;
+import org.gerdoc.pixup.jdbc.impl.GeneroJdbcImpl;
+import org.gerdoc.pixup.jdbc.impl.VideoJdbcImpl;
+import org.gerdoc.pixup.modelos.agregar.Artista;
 import org.gerdoc.pixup.modelos.agregar.Genero;
 import org.gerdoc.pixup.modelos.agregar.Video;
-import org.gerdoc.pixup.modelos.agregar.Artista;
 import org.gerdoc.pixup.util.ReadUtil;
 
-public class VideoCatalogo extends Catalogos<Video> {
-    public static VideoCatalogo videoCatalogo;
+import java.util.List;
 
-    private VideoCatalogo() {
-        super();
-    }
+public class VideoCatalogo extends Catalogos<Video> {
+    private static VideoCatalogo instancia;
+
+    private VideoCatalogo() {}
 
     public static VideoCatalogo getInstance() {
-        if (videoCatalogo == null) {
-            videoCatalogo = new VideoCatalogo();
+        if (instancia == null) {
+            instancia = new VideoCatalogo();
         }
-        return videoCatalogo;
+        return instancia;
     }
 
     @Override
@@ -28,57 +30,113 @@ public class VideoCatalogo extends Catalogos<Video> {
 
     @Override
     public boolean processNewT(Video video) {
-
-        System.out.println("Ingresa el Nombre del Video");
+        System.out.println("Nombre del video:");
         video.setNombre(ReadUtil.read());
 
-        System.out.println("Ingresa la Descripcion del Video");
+        System.out.println("Descripción (opcional):");
         video.setDescripcion(ReadUtil.read());
 
-        System.out.println("Ingresa el Archivo del Video");
+        System.out.println("Ruta del archivo:");
         video.setArchivo(ReadUtil.read());
 
-        System.out.println("Ingresa la Duracion del Video (en segundos)");
-        video.setDuracion(Integer.parseInt(ReadUtil.read()));
+        System.out.println("Duración en segundos:");
+        video.setDuracion(ReadUtil.readInt());
 
-        System.out.println("Ingresa el Id del Artista del Video");
-        int idArtista = Integer.parseInt(ReadUtil.read());
-        Artista artista = HibernateUtil.getSession().find(Artista.class, idArtista);
+        System.out.println("ID del artista:");
+        Artista artista = ArtistaJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (artista == null) {
+            System.out.println("Artista no encontrado.");
+            return false;
+        }
         video.setArtista(artista);
 
-        System.out.println("Ingresa el Id del Genero del Video");
-        int idGenero = Integer.parseInt(ReadUtil.read());
-        Genero genero = HibernateUtil.getSession().find(Genero.class, idGenero);
+        System.out.println("ID del género:");
+        Genero genero = GeneroJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (genero == null) {
+            System.out.println("Género no encontrado.");
+            return false;
+        }
         video.setGenero(genero);
 
-        return true;
+        return VideoJdbcImpl.getInstance().save(video);
     }
 
     @Override
     public void processEditT(Video video) {
-        System.out.println("ID del Video: " + video.getId());
-        System.out.println("Nombre del Video a editar: " + video.getNombre());
+        System.out.println("Editar video ID: " + video.getId());
 
-        System.out.println("Teclee el nuevo nombre del Video:");
+        System.out.println("Nuevo nombre [" + video.getNombre() + "]:");
         video.setNombre(ReadUtil.read());
 
-        System.out.println("Teclee la nueva descripción del Video:");
+        System.out.println("Nueva descripción:");
         video.setDescripcion(ReadUtil.read());
 
-        System.out.println("Teclee el nuevo archivo del Video:");
+        System.out.println("Nueva ruta de archivo:");
         video.setArchivo(ReadUtil.read());
 
-        System.out.println("Teclee la nueva duración del Video (en minutos):");
-        video.setDuracion(Integer.parseInt(ReadUtil.read()));
+        System.out.println("Nueva duración:");
+        video.setDuracion(ReadUtil.readInt());
 
-        System.out.println("Ingresa el Id del nuevo Artista del Video");
-        int idArtista = Integer.parseInt(ReadUtil.read());
-        Artista artista = HibernateUtil.getSession().find(Artista.class, idArtista);
-        video.setArtista(artista);
+        System.out.println("Nuevo ID de artista:");
+        Artista artista = ArtistaJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (artista != null) {
+            video.setArtista(artista);
+        }
 
-        System.out.println("Ingresa el Id del nuevo Genero del Video");
-        int idGenero = Integer.parseInt(ReadUtil.read());
-        Genero genero = HibernateUtil.getSession().find(Genero.class, idGenero);
-        video.setGenero(genero);
+        System.out.println("Nuevo ID de género:");
+        Genero genero = GeneroJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (genero != null) {
+            video.setGenero(genero);
+        }
+
+        if (VideoJdbcImpl.getInstance().update(video)) {
+            System.out.println("Video actualizado exitosamente.");
+        } else {
+            System.out.println("Error al actualizar.");
+        }
+    }
+
+    @Override
+    public void print() {
+        List<Video> videos = VideoJdbcImpl.getInstance().findAll();
+        if (videos.isEmpty()) {
+            System.out.println("No hay videos registrados.");
+        } else {
+            videos.forEach(System.out::println);
+        }
+    }
+
+    @Override
+    public void add() {
+        Video video = newT();
+        if (processNewT(video)) {
+            System.out.println("Video guardado correctamente.");
+        } else {
+            System.out.println("No se pudo guardar el video.");
+        }
+    }
+
+    @Override
+    public void edit() {
+        print();
+        System.out.println("ID del video a editar:");
+        Video video = VideoJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (video != null) {
+            processEditT(video);
+        } else {
+            System.out.println("Video no encontrado.");
+        }
+    }
+
+    @Override
+    public void remove() {
+        print();
+        System.out.println("ID del video a eliminar:");
+        Video video = VideoJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (video != null && VideoJdbcImpl.getInstance().delete(video)) {
+            System.out.println("Video eliminado correctamente.");
+        } else {
+            System.out.println("No se pudo eliminar.");
+        }
     }
 }

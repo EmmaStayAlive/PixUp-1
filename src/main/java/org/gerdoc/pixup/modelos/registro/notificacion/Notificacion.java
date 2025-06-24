@@ -11,6 +11,7 @@ import jakarta.persistence.Column;
 // Entity indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 // Table se utiliza para especificar el nombre de la tabla en la base de datos
 import jakarta.persistence.Table;
@@ -33,13 +34,13 @@ public class Notificacion extends Catalogo {
     @Column( name ="FECHA" , nullable = false )
     private String fecha;
 
-    @ManyToOne( targetEntity = Usuario.class, optional = false, fetch = FetchType.EAGER )
-    @Column( name = "TBL_USUARIO_ID", nullable = false )
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "TBL_USUARIO_ID", nullable = false)
     @Fetch(FetchMode.JOIN)
     private Usuario usuario;
 
-    @ManyToOne( targetEntity = TNotificacion.class, optional = false, fetch = FetchType.EAGER )
-    @Column( name = "TBL_TNOTIFICACION_ID", nullable = false )
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "TBL_TNOTIFICACION_ID", nullable = false)
     @Fetch(FetchMode.JOIN)
     private TNotificacion tNotificacion;
 }

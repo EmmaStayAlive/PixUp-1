@@ -1,23 +1,24 @@
 package org.gerdoc.pixup.gui.consola.Catalogo;
 
 import org.gerdoc.pixup.gui.consola.Catalogos;
-import org.gerdoc.pixup.hibernate.HibernateUtil;
-import org.gerdoc.pixup.modelos.agregar.Disco;
+import org.gerdoc.pixup.jdbc.impl.CancionJdbcImpl;
+import org.gerdoc.pixup.jdbc.impl.DiscoJdbcImpl;
 import org.gerdoc.pixup.modelos.agregar.Cancion;
+import org.gerdoc.pixup.modelos.agregar.Disco;
 import org.gerdoc.pixup.util.ReadUtil;
 
-public class CancionCatalogo extends Catalogos<Cancion> {
-    public static CancionCatalogo cancionCatalogo;
+import java.util.List;
 
-    private CancionCatalogo() {
-        super();
-    }
+public class CancionCatalogo extends Catalogos<Cancion> {
+    private static CancionCatalogo instancia;
+
+    private CancionCatalogo() {}
 
     public static CancionCatalogo getInstance() {
-        if (cancionCatalogo == null) {
-            cancionCatalogo = new CancionCatalogo();
+        if (instancia == null) {
+            instancia = new CancionCatalogo();
         }
-        return cancionCatalogo;
+        return instancia;
     }
 
     @Override
@@ -27,35 +28,89 @@ public class CancionCatalogo extends Catalogos<Cancion> {
 
     @Override
     public boolean processNewT(Cancion cancion) {
-
-        System.out.println("Ingresa el Título de la Canción");
+        System.out.println("Título de la canción:");
         cancion.setTitulo(ReadUtil.read());
 
-        System.out.println("Ingresa la Duración de la Canción (en minutos)");
+        System.out.println("Duración (ej. 03:25):");
         cancion.setDuracion(ReadUtil.read());
 
-        System.out.println("Ingresa el Id del Disco asociado a la Canción");
-        int idDisco = Integer.parseInt(ReadUtil.read());
-        Disco disco = HibernateUtil.getSession().find(Disco.class, idDisco);
+        System.out.println("ID del disco:");
+        Disco disco = DiscoJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (disco == null) {
+            System.out.println("Disco no encontrado.");
+            return false;
+        }
         cancion.setDisco(disco);
 
-        return true;
+        return CancionJdbcImpl.getInstance().save(cancion);
     }
 
     @Override
     public void processEditT(Cancion cancion) {
-        System.out.println("ID de la Canción: " + cancion.getId());
-        System.out.println("Título de la Canción a editar: " + cancion.getTitulo());
+        System.out.println("Editar canción ID: " + cancion.getId());
 
-        System.out.println("Ingresa el nuevo Título de la Canción (presiona Enter para mantener el actual)");
+        System.out.println("Nuevo título [" + cancion.getTitulo() + "]:");
         cancion.setTitulo(ReadUtil.read());
 
-        System.out.println("Ingresa la nueva Duración de la Canción (presiona Enter para mantener la actual)");
+        System.out.println("Nueva duración [" + cancion.getDuracion() + "]:");
         cancion.setDuracion(ReadUtil.read());
 
-        System.out.println("Ingresa el nuevo Id del Disco asociado a la Canción (presiona Enter para mantener el actual)");
-        int idDisco = Integer.parseInt(ReadUtil.read());
-        Disco disco = HibernateUtil.getSession().find(Disco.class, idDisco);
-        cancion.setDisco(disco);
+        System.out.println("Nuevo ID de disco:");
+        Disco disco = DiscoJdbcImpl.getInstance().findById(ReadUtil.readInt());
+        if (disco != null) {
+            cancion.setDisco(disco);
+        }
+
+        if (CancionJdbcImpl.getInstance().update(cancion)) {
+            System.out.println("Canción actualizada correctamente.");
+        } else {
+            System.out.println("No se pudo actualizar.");
+        }
+    }
+
+    @Override
+    public void print() {
+        List<Cancion> canciones = CancionJdbcImpl.getInstance().findAll();
+        if (canciones.isEmpty()) {
+            System.out.println("No hay canciones registradas.");
+        } else {
+            canciones.forEach(System.out::println);
+        }
+    }
+
+    @Override
+    public void add() {
+        Cancion cancion = newT();
+        if (processNewT(cancion)) {
+            System.out.println("Canción registrada exitosamente.");
+        } else {
+            System.out.println("No se registró la canción.");
+        }
+    }
+
+    @Override
+    public void edit() {
+        print();
+        System.out.println("ID de la canción a editar:");
+        int id = ReadUtil.readInt();
+        Cancion cancion = CancionJdbcImpl.getInstance().findById(id);
+        if (cancion != null) {
+            processEditT(cancion);
+        } else {
+            System.out.println("Canción no encontrada.");
+        }
+    }
+
+    @Override
+    public void remove() {
+        print();
+        System.out.println("ID de la canción a eliminar:");
+        int id = ReadUtil.readInt();
+        Cancion cancion = CancionJdbcImpl.getInstance().findById(id);
+        if (cancion != null && CancionJdbcImpl.getInstance().delete(cancion)) {
+            System.out.println("Canción eliminada correctamente.");
+        } else {
+            System.out.println("No se pudo eliminar.");
+        }
     }
 }

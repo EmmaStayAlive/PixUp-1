@@ -10,6 +10,7 @@ import jakarta.persistence.Column;
 // Entity indica que esta clase es una entidad JPA, lo que significa que se mapeará a una tabla en la base de datos
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 // Table se utiliza para especificar el nombre de la tabla en la base de datos
 import jakarta.persistence.Table;
@@ -38,8 +39,8 @@ public class Documento extends Catalogo {
     @Column( name ="FECHA" )
     private String fecha;
 
-    @ManyToOne( targetEntity = Artista.class, optional = false, fetch = FetchType.EAGER )
-    @Column( name = "TBL_ARTISTA_ID", nullable = false )
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "TBL_ARTISTA_ID", nullable = false)
     @Fetch(FetchMode.JOIN)
     private Artista artista;
 }
